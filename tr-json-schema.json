@@ -1,0 +1,819 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "type": "object",
+    "title": "Trunk Config",
+    "properties": {
+        "ver": {
+            "type": "number",
+            "default": 2,
+            "minimum": 2
+        },
+        "consoleLog": {
+            "type": "boolean",
+            "default": true
+        },
+        "logColor": {
+            "type": "string",
+            "enum": [
+                "console",
+                "logfile",
+                "all",
+                "none"
+            ],
+            "default": "console"
+        },
+        "logFile": {
+            "type": "boolean",
+            "default": false
+        },
+        "logDir": {
+            "type": "string",
+            "default": "logs"
+        },
+        "tempDir": {
+            "type": "string",
+            "default": "/dev/shm"
+        },
+        "captureDir": {
+            "type": "string",
+            "default": "."
+        },
+        "uploadServer": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+                "https://api.openmhz.com"
+            ]
+        },
+        "broadcastifyCallsServer": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+                "https://api.broadcastify.com/call-upload"
+            ]
+        },
+        "statusServer": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+                "ws://127.0.1.1:8999/server"
+            ]
+        },
+        "instanceKey": {
+            "type": "string"
+        },
+        "instanceId": {
+            "type": "string"
+        },
+        "broadcastSignals": {
+            "type": "boolean",
+            "default": true
+        },
+        "defaultMode": {
+            "type": "string",
+            "enum": [
+                "analog",
+                "digital"
+            ],
+            "default": "digital"
+        },
+        "callTimeout": {
+            "type": "number",
+            "default": 3,
+            "minimum": 0
+        },
+        "controlWarnRate": {
+            "type": "number",
+            "default": 10,
+            "minimum": 0
+        },
+        "controlRetuneLimit": {
+            "type": "integer",
+            "default": 0,
+            "minimum": 0
+        },
+        "softVocoder": {
+            "type": "boolean",
+            "default": false
+        },
+        "audioStreaming": {
+            "type": "boolean",
+            "default": false
+        },
+        "recordUUVCalls": {
+            "type": "boolean",
+            "default": true
+        },
+        "newCallFromUpdate": {
+            "type": "boolean",
+            "default": true
+        },
+        "frequencyFormat": {
+            "type": "string",
+            "enum": [
+                "exp",
+                "mhz",
+                "hz"
+            ],
+            "default": "mhz"
+        },
+        "statusAsString": {
+            "type": "boolean",
+            "default": true
+        },
+        "logLevel": {
+            "type": "string",
+            "enum": [
+                "trace",
+                "debug",
+                "info",
+                "warning",
+                "error",
+                "fatal"
+            ],
+            "default": "info"
+        },
+        "debugRecorder": {
+            "type": "boolean"
+        },
+        "debugRecorderAddress": {
+            "type": "string",
+            "format": "uri",
+            "default": "127.0.0.1"
+        },
+        "debugRecorderPort": {
+            "type": "integer"
+        },
+        "broadcastifySslVerifyDisable": {
+            "type": "boolean",
+            "default": false
+        },
+        "systems": {
+            "type": "array",
+            "additionalItems": false,
+            "minItems": 1,
+            "additionalProperties": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "shortName": {
+                        "type": "string",
+                        "examples": [
+                            "sysName"
+                        ]
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "conventional",
+                            "conventionalP25",
+                            "conventionalDMR",
+                            "conventionalSIGMF",
+                            "smartnet",
+                            "p25"
+                        ],
+                        "examples": [
+                            "p25"
+                        ]
+                    },
+                    "channels": {
+                        "type": "array",
+                        "additionalItems": true,
+                        "minItems": 1,
+                        "items": {
+                            "type": "number",
+                            "minimum": 0,
+                            "examples": [
+                                144000000,
+                                148000000
+                            ]
+                        }
+                    },
+                    "channelFile": {
+                        "type": "string",
+                        "examples": [
+                            "channelfile.csv"
+                        ]
+                    },
+                    "control_channels": {
+                        "type": "array",
+                        "additionalItems": true,
+                        "items": {
+                            "type": "number",
+                            "minimum": 0,
+                            "examples": [
+                                855000000,
+                                856000000
+                            ]
+                        }
+                    },
+                    "talkgroupsFile": {
+                        "type": "string",
+                        "examples": [
+                            "talkgroups.csv"
+                        ]
+                    },
+                    "digitalLevels": {
+                        "type": "number",
+                        "minimum": 0,
+                        "default": 1
+                    },
+                    "analogLevels": {
+                        "type": "number",
+                        "minimum": 0,
+                        "default": 1
+                    },
+                    "squelch": {
+                        "type": "number",
+                        "default": -160,
+                        "maximum": 0
+                    },
+                    "maxDev": {
+                        "type": "number",
+                        "default": 4000
+                    },
+                    "filterWidth": {
+                        "type": "number",
+                        "default": 1
+                    },
+                    "conversation_mode": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "modulation": {
+                        "type": "string",
+                        "enum": [
+                            "qpsk",
+                            "fsk4"
+                        ],
+                        "default": "qpsk"
+                    },
+                    "apiKey": {
+                        "type": "string",
+                        "examples": [
+                            "11111111222222223333333344444444"
+                        ]
+                    },
+                    "broadcastifyApiKey": {
+                        "type": "string",
+                        "examples": [
+                            "11111111-2222-3333-4444-555555555555"
+                        ],
+                        "format": "uuid"
+                    },
+                    "broadcastifySystemId": {
+                        "type": "string",
+                        "examples": [
+                            "9999"
+                        ]
+                    },
+                    "uploadScript": {
+                        "type": "string",
+                        "examples": [
+                            "./upload_script.sh"
+                        ]
+                    },
+                    "unitScript": {
+                        "type": "string",
+                        "examples": [
+                            "./unit_script.sh"
+                        ]
+                    },
+                    "compressWav": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "callLog": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "audioArchive": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "transmissionArchive": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "unitTagsFile": {
+                        "type": "string"
+                    },
+                    "recordUnknown": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "decodeMDC": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "decodeFSync": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "decodeStar": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "decodeTPS": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "talkgroupDisplayFormat": {
+                        "type": "string",
+                        "enum": [
+                            "Id",
+                            "id_tag",
+                            "tag_id"
+                        ],
+                        "default": "Id",
+                        "examples": [
+                            "id_tag"
+                        ]
+                    },
+                    "sysId": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "nac": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "wacn": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "bandplan": {
+                        "type": "string",
+                        "enum": [
+                            "800_standard",
+                            "800_reband",
+                            "800_splinter",
+                            "400_custom"
+                        ]
+                    },
+                    "bandplanBase": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "bandplanHigh": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "bandplanSpacing": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "bandplanOffset": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "hideEncrypted": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "hideUnknownTalkgroups": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "minDuration": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "maxDuration": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "minTransmissionDuration": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "multiSite": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "multiSiteSystemName": {
+                        "type": "string"
+                    },
+                    "multiSiteSystemNumber": {
+                        "type": "integer"
+                    }
+                },
+                "additionalProperties": false,
+                "if": {
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "format": "regex",
+                            "pattern": "conventional.*"
+                        }
+                    }
+                },
+                "then": {
+                    "additionalProperties": true,
+                    "if": {
+                        "properties": {
+                            "channelFile": {
+                                "type": "string",
+                                "format": "regex",
+                                "pattern": ".*"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "channelFile": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "channelFile"
+                        ]
+                    },
+                    "else": {
+                        "properties": {
+                            "channels": {
+                                "type": "array",
+                                "additionalItems": true,
+                                "minItems": 1,
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "required": [
+                            "channels"
+                        ]
+                    }
+                },
+                "else": {
+                    "properties": {
+                        "control_channels": {
+                            "type": "array",
+                            "additionalItems": true,
+                            "minItems": 1,
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "required": [
+                        "control_channels"
+                    ]
+                },
+                "required": [
+                    "shortName"
+                ],
+                "dependentRequired": {
+                    "multiSiteSystemName": [
+                        "multiSite"
+                    ],
+                    "multiSiteSystemNumber": [
+                        "multiSite"
+                    ]
+                }
+            }
+        },
+        "sources": {
+            "type": "array",
+            "additionalItems": false,
+            "minItems": 1,
+            "additionalProperties": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "driver": {
+                        "type": "string",
+                        "enum": [
+                            "usrp",
+                            "osmosdr",
+                            "sigmf",
+                            "iqfile"
+                        ]
+                    },
+                    "device": {
+                        "type": "string"
+                    },
+                    "iqFile": {
+                        "type": "string",
+                        "examples": [
+                            " iq.file"
+                        ]
+                    },
+                    "iqType": {
+                        "type": "string",
+                        "examples": [
+                            "complex"
+                        ],
+                        "enum": [
+                            "complex",
+                            "float"
+                        ]
+                    },
+                    "digitalRecorders": {
+                        "type": "number",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "sigmfRecorders": {
+                        "type": "number",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "analogRecorders": {
+                        "type": "number",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "center": {
+                        "type": "number"
+                    },
+                    "rate": {
+                        "type": "number"
+                    },
+                    "error": {
+                        "type": "number"
+                    },
+                    "gain": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "ppm": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "agc": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "ifGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "bbGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "mixGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "lnaGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "pgaGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "tiaGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "ampGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0,
+                        "deprecated": false
+                    },
+                    "vgaGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "vga1Gain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "vga2Gain": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "silenceFrame": {
+                        "type": "integer"
+                    },
+                    "signalDetectorThreshold": {
+                        "type": "number",
+                        "maximum": 0
+                    },
+                    "gainSettings": {
+                        "type": "object",
+                        "properties": {
+                            "IF": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "BB": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "MIX": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "LNA": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "TIA": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "AMP": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "VGA": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "VGA1": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "VGA2": {
+                                "type": "number",
+                                "minimum": 0
+                            }
+                        },
+                        "additionalProperties": true,
+                        "minProperties": 1
+                    }
+                },
+                "additionalProperties": false,
+                "allOf": [
+                    {
+                        "type": "object",
+                        "if": {
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "const": "iqfile"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "iqFile": {
+                                    "type": "string"
+                                },
+                                "iqType": {
+                                    "type": "string"
+                                },
+                                "repeat": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "center": {
+                                    "type": "number"
+                                },
+                                "rate": {
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "iqFile",
+                                "iqType",
+                                "center",
+                                "rate"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "object",
+                        "if": {
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "const": "sigmf"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "sigmfData": {
+                                    "type": "string"
+                                },
+                                "sigmfMeta": {
+                                    "type": "string"
+                                },
+                                "repeat": {
+                                    "type": "boolean",
+                                    "default": false
+                                }
+                            },
+                            "required": [
+                                "sigmfData",
+                                "sigmfMeta"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": true,
+                        "if": {
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "enum": [
+                                        "usrp",
+                                        "osmosdr"
+                                    ]
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "center": {
+                                    "type": "number"
+                                },
+                                "rate": {
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "center",
+                                "rate"
+                            ]
+                        }
+                    }
+                ],
+                "required": [
+                    "driver",
+                    "center",
+                    "rate"
+                ],
+                "dependentRequired": {
+                    "device": [
+                        "driver"
+                    ]
+                }
+            }
+        },
+        "plugins": {
+            "type": "array",
+            "additionalItems": false,
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "examples": [
+                            "TR Plugin"
+                        ]
+                    },
+                    "library": {
+                        "type": "string",
+                        "examples": [
+                            "libtrplugin.so"
+                        ]
+                    }
+                },
+                "additionalProperties": true,
+                "required": [
+                    "name",
+                    "library"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "ver",
+        "systems",
+        "sources"
+    ],
+    "dependentRequired": {
+        "broadcastSignals": [
+            "statusServer"
+        ],
+        "debugRecorderAddress": [
+            "debugRecorder"
+        ],
+        "debugRecorderPort": [
+            "debugRecorder"
+        ],
+        "broadcastifySslVerifyDisable": [
+            "broadcastifyCallsServer"
+        ]
+    }
+}
