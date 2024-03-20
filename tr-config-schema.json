@@ -1,0 +1,1000 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "type": "object",
+    "title": "Trunk Recorder Schema",
+    "description": "Schema for trunk-recorder config.json files.",
+    "properties": {
+        "ver": {
+            "type": "number",
+            "description": "The version of formatting for the config file. This should be set to 2. Trunk Recorder will not start without this set.",
+            "default": 2,
+            "minimum": 2
+        },
+        "consoleLog": {
+            "type": "boolean",
+            "description": "Send logging output to the console",
+            "default": true
+        },
+        "logColor": {
+            "type": "string",
+            "description": "Control the output of ANSI color in the console or logfiles. The presence of the NO_COLOR env variable will modify the default if set (export NO_COLOR=1).",
+            "enum": [
+                "console",
+                "logfile",
+                "all",
+                "none"
+            ],
+            "default": "console"
+        },
+        "logFile": {
+            "type": "boolean",
+            "description": "Send logging output to a file",
+            "default": false
+        },
+        "logDir": {
+            "type": "string",
+            "description": "Where the output logs should be put",
+            "default": "logs"
+        },
+        "tempDir": {
+            "type": "string",
+            "description": "The complete path to the directory where individual Transmissions are recorded, prior to be combined into a single file. It is best to use memory based file system for this.",
+            "default": "/dev/shm"
+        },
+        "captureDir": {
+            "type": "string",
+            "description": "The complete path to the directory where recordings should be saved.",
+            "default": "."
+        },
+        "uploadServer": {
+            "type": "string",
+            "description": "The URL for uploading to OpenMHz. The default is an empty string. See the Config tab for your system in OpenMHz to find what the value should be.",
+            "format": "uri",
+            "examples": [
+                "https://api.openmhz.com"
+            ]
+        },
+        "broadcastifyCallsServer": {
+            "type": "string",
+            "description": "The URL for uploading to Broadcastify Calls. The default is an empty string. Refer to Broadcastify's wiki for the upload URL.",
+            "format": "uri",
+            "examples": [
+                "https://api.broadcastify.com/call-upload"
+            ]
+        },
+        "statusServer": {
+            "type": "string",
+            "description": "The URL for a WebSocket connect. Trunk Recorder will send JSON formatted update message to this address",
+            "format": "uri",
+            "examples": [
+                "ws://127.0.1.1:8999/server"
+            ]
+        },
+        "instanceKey": {
+            "type": "string",
+            "examples": [
+                "trunk-key"
+            ]
+        },
+        "instanceId": {
+            "type": "string",
+            "examples": [
+                "trunk-recorder"
+            ]
+        },
+        "broadcastSignals": {
+            "type": "boolean",
+            "description": "Broadcast decoded signals to the status server.",
+            "default": true
+        },
+        "defaultMode": {
+            "type": "string",
+            "description": "Default mode to use when a talkgroups is not listed in the talkgroupsFile. The options are digital or analog. The default is digital. This argument is global and not system-specific, and only affects smartnet trunking systems which can have both analog and digital talkpaths.",
+            "enum": [
+                "analog",
+                "digital"
+            ],
+            "default": "digital"
+        },
+        "callTimeout": {
+            "type": "number",
+            "description": "A Call will stop recording and save if it has not received anything on the control channel, after this many seconds.",
+            "default": 3,
+            "minimum": 0
+        },
+        "controlWarnRate": {
+            "type": "number",
+            "description": "Log the control channel decode rate when it falls bellow this threshold. The value of -1 will always log the decode rate.",
+            "default": 10,
+            "minimum": 0
+        },
+        "controlRetuneLimit": {
+            "type": "integer",
+            "description": "Number of times to attempt to retune to a different control channel when there's no signal. 0 means unlimited attemps. The counter is reset when a signal is found. Should be at least equal to the number of channels defined in order for all to be attempted.",
+            "default": 0,
+            "minimum": 0
+        },
+        "softVocoder": {
+            "type": "boolean",
+            "description": "Use the Software Decode vocoder from OP25 for Phase 1 audio.",
+            "default": false
+        },
+        "audioStreaming": {
+            "type": "boolean",
+            "description": "Whether or not to enable the audio streaming callbacks for plugins.",
+            "default": false
+        },
+        "recordUUVCalls": {
+            "type": "boolean",
+            "default": true
+        },
+        "newCallFromUpdate": {
+            "type": "boolean",
+            "description": "Allow for UPDATE trunking messages to start a new Call, in addition to GRANT messages.",
+            "default": true
+        },
+        "frequencyFormat": {
+            "type": "string",
+            "description": "The display format for frequencies to display in the console and log file.",
+            "enum": [
+                "exp",
+                "mhz",
+                "hz"
+            ],
+            "default": "mhz"
+        },
+        "statusAsString": {
+            "type": "boolean",
+            "description": "Show status as strings instead of numeric values",
+            "default": true
+        },
+        "logLevel": {
+            "type": "string",
+            "description": "The logging level to display in the console and log file. The options are trace, debug, info, warning, error & fatal. The default is info.",
+            "enum": [
+                "trace",
+                "debug",
+                "info",
+                "warning",
+                "error",
+                "fatal"
+            ],
+            "default": "info"
+        },
+        "debugRecorder": {
+            "type": "boolean",
+            "description": "Will attach a debug recorder to each Source. The debug recorder will allow you to examine the channel of a call be recorded."
+        },
+        "debugRecorderAddress": {
+            "type": "string",
+            "description": "The network address of the computer that will be monitoring the Debug Recorders.",
+            "format": "uri",
+            "default": "127.0.0.1"
+        },
+        "debugRecorderPort": {
+            "type": "integer",
+            "description": "The network port that the Debug Recorders will start on."
+        },
+        "broadcastifySslVerifyDisable": {
+            "type": "boolean",
+            "description": "Optionally disable SSL verification for Broadcastify uploads, given their apparent habit of letting their SSL certificate expire",
+            "default": false
+        },
+        "systems": {
+            "type": "array",
+            "description": "An array of JSON formatted System Objects that define the trunking systems that will be recorded.",
+            "additionalItems": false,
+            "minItems": 1,
+            "additionalProperties": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "control whether a configured system is enabled or disabled",
+                        "default": true
+                    },
+                    "shortName": {
+                        "type": "string",
+                        "description": "This is a nickname for the system. ",
+                        "examples": [
+                            "sysName"
+                        ]
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of radio system.",
+                        "enum": [
+                            "conventional",
+                            "conventionalP25",
+                            "conventionalDMR",
+                            "conventionalSIGMF",
+                            "smartnet",
+                            "p25"
+                        ],
+                        "examples": [
+                            "p25"
+                        ]
+                    },
+                    "channels": {
+                        "type": "array",
+                        "description": "For conventional systems The channel frequencies, in Hz, used for the system. The channels get assigned a virtual talkgroup number based upon their position in the array. ",
+                        "additionalItems": true,
+                        "minItems": 1,
+                        "items": {
+                            "type": "number",
+                            "minimum": 0,
+                            "examples": [
+                                144000000,
+                                148000000
+                            ]
+                        }
+                    },
+                    "channelFile": {
+                        "type": "string",
+                        "description": "For conventional systems The filename for a CSV file that provides information about the conventional channels. ",
+                        "examples": [
+                            "channelfile.csv"
+                        ]
+                    },
+                    "control_channels": {
+                        "type": "array",
+                        "description": "For trunked systems The control channel frequencies for the system, in Hz. The frequencies will automatically be cycled through if the system moves to an alternate channel.",
+                        "additionalItems": true,
+                        "items": {
+                            "type": "number",
+                            "minimum": 0,
+                            "examples": [
+                                855000000,
+                                856000000
+                            ]
+                        }
+                    },
+                    "talkgroupsFile": {
+                        "type": "string",
+                        "description": "The filename for a CSV file that provides information about the talkgroups. ",
+                        "examples": [
+                            "talkgroups.csv"
+                        ]
+                    },
+                    "digitalLevels": {
+                        "type": "number",
+                        "description": "The amount of amplification that will be applied to the digital audio.",
+                        "minimum": 0,
+                        "default": 1
+                    },
+                    "analogLevels": {
+                        "type": "number",
+                        "description": "The amount of amplification that will be applied to the analog audio.",
+                        "minimum": 0,
+                        "default": 8
+                    },
+                    "squelch": {
+                        "type": "number",
+                        "description": "Squelch in DB, this needs to be set for all conventional systems. The squelch setting is also used for analog talkgroups in a SmartNet system.",
+                        "default": -160,
+                        "maximum": 0
+                    },
+                    "maxDev": {
+                        "type": "number",
+                        "description": "The maximum deviation for analog channels. If you analog recordings sound good or if you have a completely digital system, then there is no need to touch this.",
+                        "default": 4000
+                    },
+                    "filterWidth": {
+                        "type": "number",
+                        "default": 1
+                    },
+                    "conversation_mode": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "modulation": {
+                        "type": "string",
+                        "description": "The type of digital modulation that the system uses. You do not need to specify this with conventionalDMR systems.",
+                        "enum": [
+                            "qpsk",
+                            "fsk4"
+                        ],
+                        "default": "qpsk"
+                    },
+                    "apiKey": {
+                        "type": "string",
+                        "description": "if uploadServer is set System-specific API key for uploading calls to OpenMHz.com. ",
+                        "examples": [
+                            "11111111222222223333333344444444"
+                        ]
+                    },
+                    "openmhzSystemId": {
+                        "type": "string",
+                        "description": "if uploadServer is set By default, the plugin will upload calls to the shortName OpenMHz system. Setting this value will allow uploads to any specific OpenMHz system with its valid API key",
+                        "examples": [
+                            "omhz_sys"
+                        ],
+                        "default": "shortName"
+                    },
+                    "broadcastifyApiKey": {
+                        "type": "string",
+                        "description": "if broadcastifyCallsServer is set System-specific API key for Broadcastify Calls",
+                        "examples": [
+                            "11111111-2222-3333-4444-555555555555"
+                        ],
+                        "format": "uuid"
+                    },
+                    "broadcastifySystemId": {
+                        "type": "string",
+                        "description": "if broadcastifyCallsServer is set System ID for Broadcastify Calls",
+                        "examples": [
+                            "9999"
+                        ]
+                    },
+                    "uploadScript": {
+                        "type": "string",
+                        "description": "The filename of a script that is called after each recording has finished. ",
+                        "examples": [
+                            "./upload_script.sh"
+                        ]
+                    },
+                    "unitScript": {
+                        "type": "string",
+                        "description": "The filename of a script that runs when a radio (unit) registers (is turned on), affiliates (joins a talk group), deregisters (is turned off), gets an acknowledgment response, transmits, gets a data channel grant, a unit-unit answer request or a Location Registration Response.",
+                        "examples": [
+                            "./unit_script.sh"
+                        ]
+                    },
+                    "compressWav": {
+                        "type": "boolean",
+                        "description": "Convert the recorded .wav file to an .m4a file.",
+                        "default": true
+                    },
+                    "callLog": {
+                        "type": "boolean",
+                        "description": "Should a json file with the call details be kept after successful uploads?",
+                        "default": true
+                    },
+                    "audioArchive": {
+                        "type": "boolean",
+                        "description": "Should the recorded audio files be kept after successfully uploading them?",
+                        "default": true
+                    },
+                    "transmissionArchive": {
+                        "type": "boolean",
+                        "description": "Should each of the individual transmission be kept? These transmission are combined together with other recent ones to form a single call.",
+                        "default": false
+                    },
+                    "unitTagsFile": {
+                        "type": "string",
+                        "description": "The filename of a CSV file that provides information about the unit tags.",
+                        "examples": [
+                            "unit_tags.csv"
+                        ]
+                    },
+                    "recordUUVCalls": {
+                        "type": "boolean",
+                        "description": "P25 only Record Unit to Unit Voice calls.",
+                        "default": true
+                    },
+                    "recordUnknown": {
+                        "type": "boolean",
+                        "description": "Record talkgroups if they are not listed in the Talkgroups File.",
+                        "default": true
+                    },
+                    "decodeMDC": {
+                        "type": "boolean",
+                        "description": "Conventional systems only enable the MDC-1200 signaling decoder.",
+                        "default": false
+                    },
+                    "decodeFSync": {
+                        "type": "boolean",
+                        "description": "Conventional systems only enable the Fleet Sync signaling decoder.",
+                        "default": false
+                    },
+                    "decodeStar": {
+                        "type": "boolean",
+                        "description": "Conventional systems only enable the Star signaling decoder.",
+                        "default": false
+                    },
+                    "decodeTPS": {
+                        "type": "boolean",
+                        "description": "Conventional systems only enable the Motorola Tactical Public Safety (aka FDNY Fireground) signaling decoder.",
+                        "default": false
+                    },
+                    "talkgroupDisplayFormat": {
+                        "type": "string",
+                        "description": "The display format for talkgroups in the console and log file.",
+                        "enum": [
+                            "Id",
+                            "id_tag",
+                            "tag_id"
+                        ],
+                        "default": "Id",
+                        "examples": [
+                            "id_tag"
+                        ]
+                    },
+                    "sysId": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "nac": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "wacn": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "bandplan": {
+                        "type": "string",
+                        "description": "SmartNet only The SmartNet bandplan that will be used.",
+                        "enum": [
+                            "800_standard",
+                            "800_reband",
+                            "800_splinter",
+                            "400_custom"
+                        ]
+                    },
+                    "bandplanBase": {
+                        "type": "number",
+                        "description": "400_custom only The base frequency, specified in Hz.\n",
+                        "default": 0
+                    },
+                    "bandplanHigh": {
+                        "type": "number",
+                        "description": "SmartNet, 400_custom only The highest channel in the system, specified in Hz.",
+                        "default": 0
+                    },
+                    "bandplanSpacing": {
+                        "type": "number",
+                        "description": "SmartNet, 400_custom only The channel spacing, specified in Hz. Typically this is 25000.",
+                        "default": 0
+                    },
+                    "bandplanOffset": {
+                        "type": "number",
+                        "description": "SmartNet, 400_custom only The offset used to calculate frequencies.",
+                        "default": 0
+                    },
+                    "hideEncrypted": {
+                        "type": "boolean",
+                        "description": "Hide encrypted talkgroups log entries",
+                        "default": false
+                    },
+                    "hideUnknownTalkgroups": {
+                        "type": "boolean",
+                        "description": "Hide unknown talkgroups log entries",
+                        "default": false
+                    },
+                    "minDuration": {
+                        "type": "number",
+                        "description": "The minimum call duration in seconds (decimals allowed)",
+                        "default": 0
+                    },
+                    "maxDuration": {
+                        "type": "number",
+                        "description": "The maximum call duration in seconds (decimals allowed)",
+                        "default": 0
+                    },
+                    "minTransmissionDuration": {
+                        "type": "number",
+                        "description": "The minimum transmission duration in seconds (decimals allowed)",
+                        "default": 0
+                    },
+                    "multiSite": {
+                        "type": "boolean",
+                        "description": "Enables multiSite mode for this system",
+                        "default": false
+                    },
+                    "multiSiteSystemName": {
+                        "type": "string",
+                        "description": "The name of the system that this site belongs to. This is required for SmartNet in Multi-Site mode.",
+                        "examples": [
+                            "multi_system"
+                        ]
+                    },
+                    "multiSiteSystemNumber": {
+                        "type": "integer",
+                        "description": "An arbitrary number used to identify this system for SmartNet in Multi-Site mode.",
+                        "minimum": 0,
+                        "examples": [
+                            1
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "if": {
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "format": "regex",
+                            "pattern": "conventional.*"
+                        }
+                    }
+                },
+                "then": {
+                    "additionalProperties": true,
+                    "if": {
+                        "properties": {
+                            "channelFile": {
+                                "type": "string",
+                                "format": "regex",
+                                "pattern": ".*"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "channelFile": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "channelFile"
+                        ]
+                    },
+                    "else": {
+                        "properties": {
+                            "channels": {
+                                "type": "array",
+                                "additionalItems": true,
+                                "minItems": 1,
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "required": [
+                            "channels"
+                        ]
+                    }
+                },
+                "else": {
+                    "properties": {
+                        "control_channels": {
+                            "type": "array",
+                            "additionalItems": true,
+                            "minItems": 1,
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "required": [
+                        "control_channels"
+                    ]
+                },
+                "required": [
+                    "shortName"
+                ],
+                "dependentRequired": {
+                    "openmhzSystemId": [
+                        "apiKey"
+                    ],
+                    "multiSiteSystemName": [
+                        "multiSite"
+                    ],
+                    "multiSiteSystemNumber": [
+                        "multiSite"
+                    ]
+                }
+            }
+        },
+        "sources": {
+            "type": "array",
+            "description": "An array of JSON formatted Source Objects that define the different SDRs available.",
+            "additionalItems": false,
+            "minItems": 1,
+            "additionalProperties": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "control whether a configured source is enabled or disabled",
+                        "default": true,
+                        "deprecated": false
+                    },
+                    "driver": {
+                        "type": "string",
+                        "description": "The GNURadio block you wish to use for the SDR.",
+                        "enum": [
+                            "usrp",
+                            "osmosdr",
+                            "sigmf",
+                            "iqfile"
+                        ],
+                        "examples": [
+                            "iqfile"
+                        ]
+                    },
+                    "device": {
+                        "type": "string",
+                        "description": "Osmosdr device name and possibly serial number or index of the device.",
+                        "examples": [
+                            "rtl=01,bias=0,buflen=65536"
+                        ]
+                    },
+                    "iqFile": {
+                        "type": "string",
+                        "description": "Path and filenme for the IQ File",
+                        "examples": [
+                            " iq.file"
+                        ]
+                    },
+                    "iqType": {
+                        "type": "string",
+                        "examples": [
+                            "complex"
+                        ],
+                        "enum": [
+                            "complex",
+                            "float"
+                        ]
+                    },
+                    "digitalRecorders": {
+                        "type": "number",
+                        "description": "The number of Digital Recorders to have attached to this source. ",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "sigmfRecorders": {
+                        "type": "number",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "analogRecorders": {
+                        "type": "number",
+                        "description": "The number of Analog Recorder to have attached to this source. ",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "center": {
+                        "type": "number",
+                        "description": "The center frequency in Hz to tune the SDR to",
+                        "minimum": 0,
+                        "examples": [
+                            855000000
+                        ]
+                    },
+                    "rate": {
+                        "type": "number",
+                        "minimum": 0,
+                        "examples": [
+                            2400000
+                        ]
+                    },
+                    "error": {
+                        "type": "number",
+                        "description": "The tuning error for the SDR, in Hz. ",
+                        "examples": [
+                            200
+                        ]
+                    },
+                    "gain": {
+                        "type": "number",
+                        "description": "The RF gain setting for the SDR. ",
+                        "minimum": 0,
+                        "examples": [
+                            16
+                        ]
+                    },
+                    "ppm": {
+                        "type": "number",
+                        "description": "The tuning error for the SDR in ppm (parts per million), as an alternative to error.",
+                        "default": 0
+                    },
+                    "agc": {
+                        "type": "boolean",
+                        "description": "Whether or not to enable the SDR's automatic gain control (if supported). ",
+                        "default": false
+                    },
+                    "ifGain": {
+                        "type": "number",
+                        "description": "AirSpy/hackrf only sets the IF gain.",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "bbGain": {
+                        "type": "number",
+                        "description": "hackrf only sets the BB gain.",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "mixGain": {
+                        "type": "number",
+                        "description": "AirSpy only sets the MIX gain.",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "lnaGain": {
+                        "type": "number",
+                        "description": "AirSpy/bladeRF only sets the LNA gain.",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "pgaGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "tiaGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "ampGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0,
+                        "deprecated": false
+                    },
+                    "vgaGain": {
+                        "type": "number",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "vga1Gain": {
+                        "type": "number",
+                        "description": "bladeRF only sets the VGA1 gain.",
+                        "default": 0,
+                        "minimum": 0
+                    },
+                    "vga2Gain": {
+                        "type": "number",
+                        "description": "bladeRF only sets the VGA2 gain.",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "antenna": {
+                        "type": "string",
+                        "description": "usrp only selects which antenna jack to use",
+                        "examples": [
+                            "TX/RX"
+                        ]
+                    },
+                    "silenceFrame": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "signalDetectorThreshold": {
+                        "type": "number",
+                        "description": "If set, a static threshold will be used for the Signal Detector on all conventional recorder.",
+                        "maximum": 0,
+                        "default": -45
+                    },
+                    "sigmfData": {
+                        "type": "string",
+                        "description": "Path and filenme for the SigMF data File",
+                        "examples": [
+                            "sig.data"
+                        ]
+                    },
+                    "sigmfMeta": {
+                        "type": "string",
+                        "description": "Path and filenme for the SigMF metadata File",
+                        "examples": [
+                            "sig.meta"
+                        ]
+                    },
+                    "repeat": {
+                        "type": "boolean",
+                        "description": "whether to repeat playback of the IQ file when it reaches the end",
+                        "default": false
+                    },
+                    "gainSettings": {
+                        "type": "object",
+                        "description": "Set the gain for any stage. The value for this setting should be passed as an object, where the key specifies the name of the gain stage and the value is the amount of gain, as an int. ",
+                        "properties": {
+                            "IF": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "BB": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "MIX": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "LNA": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "TIA": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "AMP": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "VGA": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "VGA1": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            },
+                            "VGA2": {
+                                "type": "number",
+                                "minimum": 0,
+                                "default": 0
+                            }
+                        },
+                        "additionalProperties": false,
+                        "minProperties": 1
+                    }
+                },
+                "additionalProperties": false,
+                "allOf": [
+                    {
+                        "type": "object",
+                        "if": {
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "const": "iqfile"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "iqFile": {
+                                    "type": "string"
+                                },
+                                "iqType": {
+                                    "type": "string"
+                                },
+                                "repeat": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "center": {
+                                    "type": "number"
+                                },
+                                "rate": {
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "iqFile",
+                                "iqType",
+                                "center",
+                                "rate"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "object",
+                        "if": {
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "const": "sigmf"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "sigmfData": {
+                                    "type": "string"
+                                },
+                                "sigmfMeta": {
+                                    "type": "string"
+                                },
+                                "repeat": {
+                                    "type": "boolean",
+                                    "default": false
+                                }
+                            },
+                            "required": [
+                                "sigmfData",
+                                "sigmfMeta"
+                            ]
+                        }
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": true,
+                        "if": {
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "enum": [
+                                        "usrp",
+                                        "osmosdr"
+                                    ]
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "center": {
+                                    "type": "number"
+                                },
+                                "rate": {
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "center",
+                                "rate"
+                            ]
+                        }
+                    }
+                ],
+                "required": [
+                    "driver"
+                ],
+                "dependentRequired": {
+                    "device": [
+                        "driver"
+                    ]
+                }
+            }
+        },
+        "plugins": {
+            "type": "array",
+            "description": "An array of JSON formatted Plugin Objects that define the different plugins to use.",
+            "additionalItems": false,
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "Control whether a configured plugin is enabled or disabled.",
+                        "default": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "the name of the plugin.",
+                        "examples": [
+                            "TR Plugin"
+                        ]
+                    },
+                    "library": {
+                        "type": "string",
+                        "description": "the name of the library that contains the plugin.",
+                        "examples": [
+                            "libtrplugin.so"
+                        ]
+                    }
+                },
+                "additionalProperties": true,
+                "required": [
+                    "name",
+                    "library"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "ver",
+        "systems",
+        "sources"
+    ],
+    "dependentRequired": {
+        "broadcastSignals": [
+            "statusServer"
+        ],
+        "debugRecorderAddress": [
+            "debugRecorder"
+        ],
+        "debugRecorderPort": [
+            "debugRecorder"
+        ],
+        "broadcastifySslVerifyDisable": [
+            "broadcastifyCallsServer"
+        ]
+    }
+}
